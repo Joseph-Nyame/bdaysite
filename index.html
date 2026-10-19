@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Happy Birthday, Naphilia Arkoh</title>
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{font-family:'Georgia',serif;overflow:hidden;height:100vh;width:100vw;background:#0a0a0a}
+
+  /* === Video layers (two, for crossfade) === */
+  #video-container{position:fixed;inset:0;z-index:0;overflow:hidden;background:#0a0a0a}
+  #video-container video{
+    position:absolute;top:50%;left:50%;
+    min-width:100%;min-height:100%;
+    transform:translate(-50%,-50%);
+    object-fit:cover;
+    filter:brightness(.45) saturate(.9);
+    opacity:0;
+    transition:opacity 1.6s ease;
+  }
+  #video-container video.active{opacity:1}
+
+  .overlay{position:fixed;inset:0;z-index:1;pointer-events:none;
+    background:radial-gradient(circle at center,rgba(0,0,0,.15),rgba(0,0,0,.7))}
+
+  .content{position:relative;z-index:2;height:100vh;display:flex;flex-direction:column;
+    justify-content:center;align-items:center;padding:2rem;text-align:center}
+
+  /* === BEFORE BIRTHDAY === */
+  #before-birthday{display:flex;flex-direction:column;align-items:center;gap:1.6rem;color:#f7e9d7;
+    text-shadow:0 2px 20px rgba(0,0,0,.8)}
+  .bunny-cute{font-size:4rem;letter-spacing:8px;animation:bounce 2s infinite}
+  @keyframes bounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-15px)}}
+  .countdown-title{font-size:1.5rem;font-weight:300;font-style:italic;letter-spacing:3px;
+    text-transform:uppercase;opacity:.85;border-bottom:1px solid rgba(255,215,150,.3);padding-bottom:.7rem}
+  .countdown-timer{display:flex;gap:1.2rem;flex-wrap:wrap;justify-content:center}
+  .countdown-block{background:rgba(30,20,15,.5);backdrop-filter:blur(4px);
+    border:1px solid rgba(255,210,150,.25);border-radius:16px;padding:1rem 1.6rem;min-width:95px;
+    box-shadow:0 8px 30px rgba(0,0,0,.5)}
+  .countdown-block .number{font-size:2.6rem;font-weight:600;color:#ffe7c7}
+  .countdown-block .label{font-size:.75rem;text-transform:uppercase;letter-spacing:2px;opacity:.7}
+  .before-message{font-size:1.05rem;font-style:italic;max-width:600px;line-height:1.6;
+    color:#e8d9c8;opacity:.9}
+
+  /* === BIRTHDAY MESSAGE === */
+  #birthday-message{display:none;flex-direction:column;align-items:center;gap:1.5rem;
+    max-width:900px;color:#fff5e9;text-shadow:0 2px 30px rgba(0,0,0,.9);animation:fadeIn 1.2s forwards}
+  @keyframes fadeIn{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+  .shakespeare-title{font-size:2rem;font-style:italic;letter-spacing:4px;text-transform:uppercase;
+    color:#ffd9a5;border-bottom:1px solid rgba(255,215,150,.4);padding-bottom:.8rem}
+  .shakespeare-body{font-size:1.05rem;line-height:1.9;font-style:italic;max-width:750px;
+    color:#f5ebe0;white-space:pre-line;text-align:center;font-weight:300}
+  .shakespeare-signature{font-size:1.3rem;font-style:italic;letter-spacing:2px;color:#ffd9a5}
+  .shakespeare-signature span{font-style:normal;font-weight:600;letter-spacing:4px;font-size:1.7rem;
+    display:inline-block;margin-top:.4rem}
+  .love-note{font-size:1.3rem;letter-spacing:3px;margin-top:.3rem}
+
+  .video-controls{position:fixed;bottom:20px;right:20px;z-index:10;display:flex;gap:12px;
+    background:rgba(20,15,10,.55);backdrop-filter:blur(8px);padding:8px 18px;border-radius:40px;
+    border:1px solid rgba(255,215,150,.25)}
+  .video-controls button{background:none;border:none;color:#f5e6d3;font-size:1.3rem;cursor:pointer;
+    padding:6px 12px;border-radius:30px;transition:.3s}
+  .video-controls button:hover{background:rgba(255,215,150,.15)}
+
+  @media(max-width:700px){
+    .shakespeare-title{font-size:1.3rem}
+    .shakespeare-body{font-size:.9rem;line-height:1.7}
+    .shakespeare-signature span{font-size:1.2rem}
+    .countdown-block{padding:.6rem 1rem;min-width:68px}
+    .countdown-block .number{font-size:1.7rem}
+    .bunny-cute{font-size:2.6rem}
+    .countdown-title{font-size:1rem}
+  }
+</style>
+</head>
+<body>
+
+<!-- Two video layers for smooth crossfade between "before" and "birthday" videos -->
+<div id="video-container">
+  <video id="video-before" class="active" autoplay loop muted playsinline src="vid/vid1.mp4"></video>
+  <video id="video-birthday" autoplay muted playsinline src="vid/vid2.mp4"></video>
+</div>
+<div class="overlay"></div>
+
+<div class="content">
+  <!-- ===== BEFORE BIRTHDAY ===== -->
+  <div id="before-birthday">
+    <div class="bunny-cute">🐰🎀🐇</div>
+    <div class="countdown-title">A little magic awaits...</div>
+    <div class="countdown-timer">
+      <div class="countdown-block"><div class="number" id="days">00</div><div class="label">Days</div></div>
+      <div class="countdown-block"><div class="number" id="hours">00</div><div class="label">Hours</div></div>
+      <div class="countdown-block"><div class="number" id="minutes">00</div><div class="label">Minutes</div></div>
+      <div class="countdown-block"><div class="number" id="seconds">00</div><div class="label">Seconds</div></div>
+    </div>
+    <div class="before-message">“The stars are aligning, my dear Mimi...<br>Something beautiful is on its way.”</div>
+  </div>
+
+  <!-- ===== BIRTHDAY MESSAGE ===== -->
+  <div id="birthday-message">
+    <div class="shakespeare-title">Happy Birthday, My Queen</div>
+    <div class="shakespeare-body">My dear Mimi, Naphilia, BabyShark, Sugarplum, My queen —
+
+Hark! The day doth dawn with sweetest grace,
+And I, a humble soul, am glad to gaze upon thy face.
+From the first hour we met, a wild and wondrous ride,
+Through personal goals, our wins, our failures side by side.
+Each triumph and each tear hath drawn us near,
+In every aspect of our lives, thou art my dear.
+
+I see thy struggles, thy challenges, thy battles fought,
+A woman strong and valiant, with courage overwrought.
+As I celebrate thee today, may this new chapter start
+To bring to life the precious things that dwell within thy heart.
+
+Things are not great for us now, the future veiled in mist,
+What might happen after this month, we cannot yet enlist.
+But I am glad we have this moment, this sweet and sacred time,
+Let tomorrow worry for itself — today, thy joy is mine.
+
+Whatever happens, know this truth, forever I shall be
+Amazed, in love, and cherishing — thy heart belongs to me.
+I pray thy days become great, and all thy dreams take flight,
+God bless and protect thee, keep thee in His light.
+
+May His favor and His mercies fall upon thy gentle soul,
+I LOVE YOU, NAPHILIA ARKOH — thou dost make me whole.</div>
+    <div class="shakespeare-signature">Happy Birthday! Have a blessed day!<br><span>💛 Forever Thine 💛</span></div>
+    <div class="love-note">🐰🎂🎈</div>
+  </div>
+</div>
+
+<div class="video-controls">
+  <button id="mute-toggle" title="Unmute">🔇</button>
+</div>
+
+<script>
+(function(){
+  // ========================================================
+  //  CONFIGURATION — edit these paths to match your files
+  // ========================================================
+  const VIDEO_BEFORE   = 'vid/vid1.mp4';   // plays before the birthday
+  const VIDEO_BIRTHDAY = 'vid/vid2.mp4';   // plays on the birthday day
+  // Trim configuration (seconds)
+  const TRIM_BEFORE = 4;    // trim for the background 'before' video
+  const TRIM_BIRTHDAY = 5; // trim for the birthday video (cut last 5s)
+
+  // The birthday date = TOMORROW at midnight (local time)
+  const now = new Date();
+  const BIRTHDAY_DATE = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1, 0, 0, 0);
+
+  // ---- TESTING: uncomment the next line to force "birthday mode" immediately ----
+  // const BIRTHDAY_DATE = new Date('2025-01-01T00:00:00');
+
+  // ========================================================
+
+  const beforeDiv  = document.getElementById('before-birthday');
+  const messageDiv = document.getElementById('birthday-message');
+  const dEl = document.getElementById('days'),
+        hEl = document.getElementById('hours'),
+        mEl = document.getElementById('minutes'),
+        sEl = document.getElementById('seconds');
+
+  const vidBefore   = document.getElementById('video-before');
+  const vidBirthday = document.getElementById('video-birthday');
+  const muteBtn     = document.getElementById('mute-toggle');
+
+  let timer = null, shown = false;
+
+  function setActiveVideoSound(enabled) {
+    // determine the currently visible/active video by class
+    const activeVid = document.querySelector('#video-container video.active') || vidBefore;
+    activeVid.muted = !enabled;
+    activeVid.volume = enabled ? 1 : 0;
+    if (enabled) activeVid.play().catch(()=>{});
+    muteBtn.textContent = enabled ? '🔊' : '🔇';
+  }
+
+  // --- Trim loop helper: prevent the last `trimSeconds` from playing ---
+  // options: { onTrimEnd: function(video) } - called once instead of looping
+  function trimLoopVideo(video, trimSeconds, options = {}) {
+    video.addEventListener('loadedmetadata', () => {
+      video._trimEnd = Math.max(0, video.duration - trimSeconds);
+      video._trimTriggered = false;
+    });
+
+    video.addEventListener('timeupdate', () => {
+      if (!video._trimEnd) return;
+      if (video.currentTime >= video._trimEnd) {
+        if (video._trimTriggered) return;
+        video._trimTriggered = true;
+        if (typeof options.onTrimEnd === 'function') {
+          options.onTrimEnd(video);
+        } else {
+          video.currentTime = 0;
+          if (!video.paused) video.play().catch(()=>{});
+        }
+      }
+    });
+
+    video.addEventListener('play', () => { video._trimTriggered = false; });
+  }
+
+  // apply trimming to videos with per-video settings
+  trimLoopVideo(vidBefore, TRIM_BEFORE);
+  // For the birthday video, stop playback a few seconds before the end
+  trimLoopVideo(vidBirthday, TRIM_BIRTHDAY, { onTrimEnd: (v) => {
+    try {
+      // move to the trim end and pause
+      v.currentTime = v._trimEnd || Math.max(0, v.duration - TRIM_BIRTHDAY);
+      v.pause();
+    } catch (e) {}
+  }});
+
+  // --- Crossfade to the birthday video + show message ---
+  function showBirthdayMessage(){
+    if (shown) return;
+    shown = true;
+    if (timer) { clearInterval(timer); timer = null; }
+
+    // Swap videos with a smooth crossfade
+    vidBefore.muted = true;
+    vidBefore.volume = 0;
+    vidBirthday.muted = false;
+    vidBirthday.volume = 1;
+    // ensure trimmed end is calculated if metadata already loaded
+    if (vidBirthday.duration && !vidBirthday._trimEnd) {
+      vidBirthday._trimEnd = Math.max(0, vidBirthday.duration - TRIM_BIRTHDAY);
+      vidBirthday._trimTriggered = false;
+    }
+    vidBirthday.currentTime = 0;
+    vidBirthday.play().catch(()=>{});
+    vidBirthday.classList.add('active');
+    vidBefore.classList.remove('active');
+
+    // After the crossfade, pause the old video to save resources
+    setTimeout(() => { try { vidBefore.pause(); } catch(e){} }, 1700);
+
+    // Swap the UI text
+    beforeDiv.style.display = 'none';
+    messageDiv.style.display = 'flex';
+    muteBtn.textContent = '🔊';
+  }
+
+  // --- Countdown tick ---
+  function tick(){
+    const diff = BIRTHDAY_DATE - new Date();
+    if (diff <= 0) { showBirthdayMessage(); return; }
+    const d = Math.floor(diff/86400000);
+    const h = Math.floor(diff/3600000) % 24;
+    const m = Math.floor(diff/60000) % 60;
+    const s = Math.floor(diff/1000) % 60;
+    dEl.textContent = String(d).padStart(2,'0');
+    hEl.textContent = String(h).padStart(2,'0');
+    mEl.textContent = String(m).padStart(2,'0');
+    sEl.textContent = String(s).padStart(2,'0');
+  }
+
+  tick();
+  timer = setInterval(tick, 1000);
+
+  // --- Video: start muted so autoplay works, then allow user to unmute ---
+  // start all videos muted so autoplay works; user can unmute
+  const vidAfterEl = document.getElementById('video-after');
+  vidBefore.muted = true;
+  vidBirthday.muted = true;
+  if (vidAfterEl) vidAfterEl.muted = true;
+  vidBefore.play().catch(()=>{});
+  // (birthday video will play when it becomes active)
+
+  muteBtn.addEventListener('click', () => {
+    const activeVid = document.querySelector('#video-container video.active') || vidBefore;
+    setActiveVideoSound(activeVid.muted);
+  });
+
+  // --- TEST SHORTCUT: press "T" to jump straight to birthday mode ---
+  document.addEventListener('keydown', e => {
+    if (e.key === 't' || e.key === 'T') {
+      showBirthdayMessage();
+      setActiveVideoSound(true);
+    }
+  });
+})();
+</script>
+</body>
+</html>
