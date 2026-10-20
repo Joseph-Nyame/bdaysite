@@ -146,12 +146,22 @@ I LOVE YOU, NAPHILIA ARKOH — thou dost make me whole.</div>
   const TRIM_BEFORE = 4;    // trim for the background 'before' video
   const TRIM_BIRTHDAY = 5; // trim for the birthday video (cut last 5s)
 
-  // The birthday date = TOMORROW at midnight (local time)
-  const now = new Date();
-  const BIRTHDAY_DATE = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1, 0, 0, 0);
+  // The birthday (local time). Month is 0-indexed: 9 = October
+  const BIRTHDAY_MONTH = 9;
+  const BIRTHDAY_DAY = 20;
+
+  // Target = this year's birthday at midnight.
+  // If that moment has already passed, the birthday message stays up
+  // until the next year's birthday comes around.
+  function getBirthdayDate(){
+    const now = new Date();
+    let d = new Date(now.getFullYear(), BIRTHDAY_MONTH, BIRTHDAY_DAY, 0, 0, 0);
+    return d;
+  }
+  let BIRTHDAY_DATE = getBirthdayDate();
 
   // ---- TESTING: uncomment the next line to force "birthday mode" immediately ----
-  // const BIRTHDAY_DATE = new Date('2025-01-01T00:00:00');
+  // BIRTHDAY_DATE = new Date('2025-01-01T00:00:00');
 
   // ========================================================
 
